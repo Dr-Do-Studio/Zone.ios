@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>622469884819-v1d39cbao9n0os6pd82viue7cjbnumba.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.622469884819-v1d39cbao9n0os6pd82viue7cjbnumba</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBFyMfs0OQn1EucNOEN9x_EUR5CJeYV7Ew</string>
+	<key>GCM_SENDER_ID</key>
+	<string>622469884819</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>HBTGames.zone</string>
+	<key>PROJECT_ID</key>
+	<string>zone-00000</string>
+	<key>STORAGE_BUCKET</key>
+	<string>zone-00000.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:622469884819:ios:a218211737263f32</string>
+	<key>DATABASE_URL</key>
+	<string>https://zone-00000.firebaseio.com</string>
+</dict>
+</plist>
