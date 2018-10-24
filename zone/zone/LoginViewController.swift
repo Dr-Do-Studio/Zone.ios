@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 extension UIImage {
     func imageLeftPadding(left_pad:CGFloat) -> UIImage? {
@@ -90,9 +91,9 @@ class LoginViewController: UIViewController{
     
     func frame_loca_with_keyboard() {
         eye_vertical_pos = screen_height*0.1
-        left_eye_black.frame = CGRect(x: screen_width/2-distance_between_eyes/2-eye_size/2-pupil_size/2, y: eye_vertical_pos+eye_size-pupil_size, width: pupil_size, height: pupil_size)
         left_eye_white.frame = CGRect(x: screen_width/2-distance_between_eyes/2-eye_size, y: eye_vertical_pos, width: eye_size, height: eye_size)
-        right_eye_black.frame = CGRect(x: screen_width/2+distance_between_eyes/2+eye_size/2-pupil_size/2, y: eye_vertical_pos+eye_size-pupil_size, width: pupil_size, height: pupil_size)
+        
+        //right_eye_black.frame = CGRect(x: screen_width/2+distance_between_eyes/2+eye_size/2-pupil_size/2, y: eye_vertical_pos+eye_size-pupil_size, width: pupil_size, height: pupil_size)
         right_eye_white.frame = CGRect(x: screen_width/2+distance_between_eyes/2, y: eye_vertical_pos, width: eye_size, height: eye_size)
         //email_label.frame = CGRect(x:screen_width*0.1,y:(screen_height-keyboard_height)*0.3,width:screen_width*0.8,height:40)
         email_field.frame = CGRect(x:screen_width*0.1,y:(screen_height-keyboard_height)*0.35,width:screen_width*0.8,height:40)
@@ -102,6 +103,8 @@ class LoginViewController: UIViewController{
         login_button.frame = CGRect(x:screen_width*0.1,y:(screen_height-keyboard_height)*0.8,width:screen_width*0.8,height:40)
         forgot_password_button.frame = CGRect(x:screen_width*0.1,y:(screen_height-keyboard_height)*0.9,width:screen_width*0.8,height:20)
         zone_icon.frame = CGRect(x:screen_width*0.4,y:screen_height*0.88,width:screen_width*0.2,height:screen_width*0.2)
+        getCursorLocation()
+        change_pupil_location()
     }
     
     override func viewDidLoad() {
@@ -120,11 +123,6 @@ class LoginViewController: UIViewController{
         login_button.layer.cornerRadius = 20
         login_button.layer.borderWidth = 2
         
-    }
-    
-    @IBAction func email_change(_ sender: Any, forEvent event: UIEvent) {
-        getCursorLocation()
-        change_pupil_location()
     }
     
     func getCursorLocation() -> Void{
@@ -155,26 +153,44 @@ class LoginViewController: UIViewController{
         return pupil_mid
     }
     
-    @IBAction func email_typing_end(_ sender: Any, forEvent event: UIEvent) {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillHide),
-            name: NSNotification.Name.UIKeyboardDidHide,
-            object: nil)
-    }
-    
     @IBAction func email_typing_begin(_ sender: Any) {
         print("email typing begin")
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyboardWillShow),
-            name: NSNotification.Name.UIKeyboardWillShow,
+            selector: #selector(keyboardDidShow),
+            name: NSNotification.Name.UIKeyboardDidShow,
+            object: nil)
+        getCursorLocation()
+        UIView.animate(withDuration: 0.3, animations: {
+            self.change_pupil_location()
+        })
+    }
+    
+    @IBAction func email_change(_ sender: Any, forEvent event: UIEvent) {
+        print("email changes")
+        getCursorLocation()
+        change_pupil_location()
+    }
+    
+    @IBAction func email_typing_end(_ sender: Any, forEvent event: UIEvent) {
+        print("email typing ends")
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidHide),
+            name: NSNotification.Name.UIKeyboardDidHide,
             object: nil)
     }
     
+    @IBAction func password_typing_begin(_ sender: Any, forEvent event: UIEvent) {
+        print("password typing begins")
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardDidShow),
+            name: NSNotification.Name.UIKeyboardDidHide,
+            object: nil)
+    }
     
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
+    @objc func keyboardDidShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             keyboard_height = keyboardRectangle.height
@@ -186,7 +202,7 @@ class LoginViewController: UIViewController{
         }
     }
     
-    @objc func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardDidHide(_ notification: Notification) {
         UIView.animate(withDuration: 0.5, animations: {
             self.frame_loca_without_keyboard()
             self.getCursorLocation()
@@ -194,10 +210,16 @@ class LoginViewController: UIViewController{
         })
     }
     
+    
+    
+    @IBAction func login_button(_ sender: Any) {
+        
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
 }
 
