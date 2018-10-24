@@ -1,6 +1,0 @@
-framework module Pods_zoneUITests {
-  umbrella header "Pods-zoneUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}

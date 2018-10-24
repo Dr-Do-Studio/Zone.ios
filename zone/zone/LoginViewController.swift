@@ -8,20 +8,7 @@
 
 import UIKit
 import Firebase
-
-extension UIImage {
-    func imageLeftPadding(left_pad:CGFloat) -> UIImage? {
-        UIGraphicsBeginImageContextWithOptions(
-            CGSize(width: self.size.width + left_pad,
-                   height: self.size.height), false, self.scale)
-        let _ = UIGraphicsGetCurrentContext()
-        let origin = CGPoint(x: left_pad, y: 0)
-        self.draw(at: origin)
-        let imageWithInsets = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return imageWithInsets
-    }
-}
+import FirebaseAuth
 
 class LoginViewController: UIViewController{
     var left_eye_white = UIImageView()
@@ -36,7 +23,8 @@ class LoginViewController: UIViewController{
     var eye_vertical_pos:CGFloat = 0
     var keyboard_height:CGFloat = 0
     
-    let temp_dot = UIImageView(image: #imageLiteral(resourceName: "black_dot"))
+    let wrong_password_color_ani = CABasicAnimation(keyPath: "borderColor")
+    
     var cursor_location = CGPoint()
     
     @IBOutlet var email_field: UITextField!
@@ -113,6 +101,13 @@ class LoginViewController: UIViewController{
         screen_height = view.frame.height
         print("screen width is \(screen_width)")
         print("screen height is \(screen_height)")
+        
+        wrong_password_color_ani.fromValue = UIColor.black.cgColor
+        wrong_password_color_ani.toValue = UIColor.red.cgColor
+        wrong_password_color_ani.duration = 0.5
+        wrong_password_color_ani.repeatCount = 1
+        wrong_password_color_ani.autoreverses = true
+        
         init_based_on_settings()
         email_field.layer.cornerRadius = 20
         email_field.layer.borderWidth = 2
@@ -122,6 +117,9 @@ class LoginViewController: UIViewController{
         registry_button.layer.borderWidth = 2
         login_button.layer.cornerRadius = 20
         login_button.layer.borderWidth = 2
+        
+        password_field.layer.borderColor = UIColor.black.cgColor
+
         
     }
     
@@ -157,7 +155,7 @@ class LoginViewController: UIViewController{
         print("email typing begin")
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyboardDidShow),
+            selector: #selector(keyboardWillShow),
             name: NSNotification.Name.UIKeyboardDidShow,
             object: nil)
         getCursorLocation()
@@ -176,7 +174,7 @@ class LoginViewController: UIViewController{
         print("email typing ends")
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyboardDidHide),
+            selector: #selector(keyboardWillHide),
             name: NSNotification.Name.UIKeyboardDidHide,
             object: nil)
     }
@@ -185,12 +183,12 @@ class LoginViewController: UIViewController{
         print("password typing begins")
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyboardDidShow),
+            selector: #selector(keyboardWillShow),
             name: NSNotification.Name.UIKeyboardDidHide,
             object: nil)
     }
     
-    @objc func keyboardDidShow(_ notification: Notification) {
+    @objc func keyboardWillShow(_ notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
             let keyboardRectangle = keyboardFrame.cgRectValue
             keyboard_height = keyboardRectangle.height
@@ -202,7 +200,7 @@ class LoginViewController: UIViewController{
         }
     }
     
-    @objc func keyboardDidHide(_ notification: Notification) {
+    @objc func keyboardWillHide(_ notification: Notification) {
         UIView.animate(withDuration: 0.5, animations: {
             self.frame_loca_without_keyboard()
             self.getCursorLocation()
@@ -213,7 +211,21 @@ class LoginViewController: UIViewController{
     
     
     @IBAction func login_button(_ sender: Any) {
-        
+        Auth.auth().signIn(withEmail: email_field.text!, password: password_field.text!) { (user, error) in
+            if error != nil {
+                print(error!)
+                self.password_field.text = nil
+                self.password_field.layer.add(self.wrong_password_color_ani, forKey: "password color ani")
+                
+                
+            }
+            else {
+                print ("login successful")
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalPageViewController") as! PersonalPageViewController
+                self.present(nextViewController, animated: true, completion: nil)
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {
