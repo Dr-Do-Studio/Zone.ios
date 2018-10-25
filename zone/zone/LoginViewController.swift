@@ -119,6 +119,9 @@ class LoginViewController: UIViewController{
         login_button.layer.borderWidth = 2
         
         password_field.layer.borderColor = UIColor.black.cgColor
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidAppear(notification:)), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
 
         
     }
@@ -153,11 +156,6 @@ class LoginViewController: UIViewController{
     
     @IBAction func email_typing_begin(_ sender: Any) {
         print("email typing begin")
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: NSNotification.Name.UIKeyboardDidShow,
-            object: nil)
         getCursorLocation()
         UIView.animate(withDuration: 0.3, animations: {
             self.change_pupil_location()
@@ -171,36 +169,36 @@ class LoginViewController: UIViewController{
     }
     
     @IBAction func email_typing_end(_ sender: Any, forEvent event: UIEvent) {
-        print("email typing ends")
+        /*print("email typing ends")
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillHide),
             name: NSNotification.Name.UIKeyboardDidHide,
-            object: nil)
+            object: nil)*/
     }
     
     @IBAction func password_typing_begin(_ sender: Any, forEvent event: UIEvent) {
         print("password typing begins")
-        NotificationCenter.default.addObserver(
+        /*NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow),
             name: NSNotification.Name.UIKeyboardDidHide,
-            object: nil)
+            object: nil)*/
     }
     
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame: NSValue = notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue {
-            let keyboardRectangle = keyboardFrame.cgRectValue
-            keyboard_height = keyboardRectangle.height
-            print (keyboard_height)
-            print (screen_height - keyboard_height)
-            UIView.animate(withDuration: 0.5, animations: {
-                self.frame_loca_with_keyboard()
-            })
-        }
+    @objc func keyboardDidAppear(notification: NSNotification) {
+        print("Keyboard appeared")
+        let keyboardSize:CGSize = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size
+        print("Keyboard size: \(keyboardSize)")
+        
+        keyboard_height = min(keyboardSize.height, keyboardSize.width)
+        UIView.animate(withDuration: 0.5, animations: {
+            self.frame_loca_with_keyboard()
+        })
     }
     
-    @objc func keyboardWillHide(_ notification: Notification) {
+    @objc func keyboardWillHide(notification: NSNotification) {
+        print("Keyboard hidden")
         UIView.animate(withDuration: 0.5, animations: {
             self.frame_loca_without_keyboard()
             self.getCursorLocation()
