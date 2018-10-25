@@ -55,11 +55,17 @@ class RegistryViewController: UIViewController{
         username_field.leftView = user_icon
         
         password_field.leftViewMode = UITextFieldViewMode.always
-        let lock_icon = UIImageView(frame: CGRect(x: 20, y: 0, width: 20, height: 20))
+        let lock_icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
         lock_icon.image = #imageLiteral(resourceName: "lock_icon")
         
         password_field.leftView = lock_icon
         password_field.isSecureTextEntry = true
+        
+        email_field.leftViewMode = UITextFieldViewMode.always
+        let email_icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        email_icon.image = #imageLiteral(resourceName: "email_icon")
+        
+        email_field.leftView = email_icon
         frame_loca_without_keyboard()
     }
     

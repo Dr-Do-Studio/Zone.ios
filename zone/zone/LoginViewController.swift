@@ -52,12 +52,14 @@ class LoginViewController: UIViewController{
         self.view.addSubview(right_eye_black)
         
         email_field.leftViewMode = UITextFieldViewMode.always
-        let user_icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))
+        let user_icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 20))
+        user_icon.contentMode = UIViewContentMode.scaleAspectFit
         user_icon.image = #imageLiteral(resourceName: "user_icon")
         email_field.leftView = user_icon
         
         password_field.leftViewMode = UITextFieldViewMode.always
-        let lock_icon = UIImageView(frame: CGRect(x: 20, y: 0, width: 20, height: 20))
+        let lock_icon = UIImageView(frame: CGRect(x: 0, y: 0, width: 40, height: 20))
+        lock_icon.contentMode = UIViewContentMode.scaleAspectFit
         lock_icon.image = #imageLiteral(resourceName: "lock_icon")
         password_field.leftView = lock_icon
         password_field.isSecureTextEntry = true
@@ -169,8 +171,8 @@ class LoginViewController: UIViewController{
     }
     
     @IBAction func email_typing_end(_ sender: Any, forEvent event: UIEvent) {
-        /*print("email typing ends")
-        NotificationCenter.default.addObserver(
+        print("email typing ends")
+        /*NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillHide),
             name: NSNotification.Name.UIKeyboardDidHide,
