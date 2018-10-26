@@ -70,6 +70,7 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
+                                    <action selector="password_typing:forEvent:" destination="BYZ-38-t0r" eventType="editingChanged" id="BhF-5B-ceU"/>
                                     <action selector="password_typing_begin:forEvent:" destination="BYZ-38-t0r" eventType="editingDidBegin" id="AtH-jt-chj"/>
                                 </connections>
                             </textField>
@@ -169,6 +170,9 @@
                                 <state key="normal" title="Create Account">
                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="create_account:forEvent:" destination="bFC-ea-EPH" eventType="touchUpInside" id="sid-Zh-Ndh"/>
+                                </connections>
                             </button>
                             <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" insetsLayoutMarginsFromSafeArea="NO" image="zone_icon" translatesAutoresizingMaskIntoConstraints="NO" id="ylu-DQ-qKa">
                                 <rect key="frame" x="152" y="555" width="70" height="69"/>

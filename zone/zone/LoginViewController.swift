@@ -22,6 +22,7 @@ class LoginViewController: UIViewController{
     var pupil_size:CGFloat = 0
     var eye_vertical_pos:CGFloat = 0
     var keyboard_height:CGFloat = 0
+    var typing_password:Bool = false
     
     let wrong_password_color_ani = CABasicAnimation(keyPath: "borderColor")
     
@@ -81,6 +82,7 @@ class LoginViewController: UIViewController{
     
     func frame_loca_with_keyboard() {
         eye_vertical_pos = screen_height*0.1
+        
         left_eye_white.frame = CGRect(x: screen_width/2-distance_between_eyes/2-eye_size, y: eye_vertical_pos, width: eye_size, height: eye_size)
         
         //right_eye_black.frame = CGRect(x: screen_width/2+distance_between_eyes/2+eye_size/2-pupil_size/2, y: eye_vertical_pos+eye_size-pupil_size, width: pupil_size, height: pupil_size)
@@ -93,8 +95,10 @@ class LoginViewController: UIViewController{
         login_button.frame = CGRect(x:screen_width*0.1,y:(screen_height-keyboard_height)*0.8,width:screen_width*0.8,height:40)
         forgot_password_button.frame = CGRect(x:screen_width*0.1,y:(screen_height-keyboard_height)*0.9,width:screen_width*0.8,height:20)
         zone_icon.frame = CGRect(x:screen_width*0.4,y:screen_height*0.88,width:screen_width*0.2,height:screen_width*0.2)
+        if (!typing_password){
         getCursorLocation()
         change_pupil_location()
+        }
     }
     
     override func viewDidLoad() {
@@ -186,10 +190,26 @@ class LoginViewController: UIViewController{
             selector: #selector(keyboardWillShow),
             name: NSNotification.Name.UIKeyboardDidHide,
             object: nil)*/
+        typing_password = true
+        UIView.animate(withDuration: 0.5, animations: {
+            self.left_eye_black.frame.origin = CGPoint(x:self.left_eye_white.frame.origin.x+self.left_eye_white.frame.size.width/2-self.pupil_size/2,y:self.left_eye_white.frame.origin.y)
+            self.right_eye_black.frame.origin = CGPoint(x:self.right_eye_white.frame.origin.x+self.right_eye_white.frame.size.width/2-self.pupil_size/2,y:self.right_eye_white.frame.origin.y)
+        })
+        
     }
+    
+    @IBAction func password_typing(_ sender: Any, forEvent event: UIEvent) {
+        print("password typing")
+        UIView.animate(withDuration: 0.5, animations: {
+            self.left_eye_black.frame.origin = CGPoint(x:self.left_eye_white.frame.origin.x+self.left_eye_white.frame.size.width/2-self.pupil_size/2,y:self.left_eye_white.frame.origin.y)
+            self.right_eye_black.frame.origin = CGPoint(x:self.right_eye_white.frame.origin.x+self.right_eye_white.frame.size.width/2-self.pupil_size/2,y:self.right_eye_white.frame.origin.y)
+        })
+    }
+    
     
     @objc func keyboardDidAppear(notification: NSNotification) {
         print("Keyboard appeared")
+        
         let keyboardSize:CGSize = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue.size
         print("Keyboard size: \(keyboardSize)")
         
