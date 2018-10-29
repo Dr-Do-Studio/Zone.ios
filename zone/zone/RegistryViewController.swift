@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 class RegistryViewController: UIViewController{
     var left_eye_white = UIImageView()
@@ -150,7 +152,19 @@ class RegistryViewController: UIViewController{
     
     
     @IBAction func create_account(_ sender: Any, forEvent event: UIEvent) {
-        
+        Auth.auth().createUser(withEmail: email_field.text!, password: password_field.text!) { (authResult, error) in
+            if error != nil {
+                print(error!)
+                self.password_field.text = nil
+                
+            }
+            else {
+                print ("reg successful")
+                let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalPageViewController") as! PersonalPageViewController
+                self.present(nextViewController, animated: true, completion: nil)
+            }
+        }
     }
     
     
