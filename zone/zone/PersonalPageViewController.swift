@@ -10,6 +10,28 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+public extension UIView {
+    func fadeIn(withDuration duration: TimeInterval = 0.5) {
+        UIView.animate(withDuration: duration, animations: {
+            self.alpha = 1.0
+        })
+    }
+    
+    func fadeInWithDisplacement(withDuration duration: TimeInterval = 0.5){
+        self.frame.origin.y += 40
+        UIView.animate(withDuration: duration, animations: {
+            self.frame.origin.y -= 40
+            self.alpha = 1.0
+        })
+    }
+    
+    func fadeOut(withDuration duration: TimeInterval = 1.0) {
+        UIView.animate(withDuration: duration, animations: {
+            self.alpha = 0.0
+        })
+    }
+}
+
 class PersonalPageViewController: UIViewController{
     
     var portrait_image = UIImage()
@@ -18,6 +40,15 @@ class PersonalPageViewController: UIViewController{
     var screen_height:CGFloat = 0
     
     @IBOutlet var portrait_button: UIButton!
+    
+    
+    @IBAction func swipe_left_to_friends_list(_ sender: Any) {
+        print("swipe left")
+    }
+    
+    @IBAction func swipe_right_to_search_list(_ sender: Any) {
+        print("swipe right")
+    }
     
     override func viewDidLoad() {
         screen_width = view.frame.width

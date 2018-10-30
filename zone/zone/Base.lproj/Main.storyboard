@@ -40,13 +40,28 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
                         <viewLayoutGuide key="safeArea" id="jyX-o2-xzY"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="ofB-pt-v04" appends="YES" id="x3b-66-Szf"/>
+                            <outletCollection property="gestureRecognizers" destination="6hY-gB-eg1" appends="YES" id="0xi-i2-Xhp"/>
+                        </connections>
                     </view>
                     <connections>
                         <outlet property="portrait_button" destination="mpL-rL-HZI" id="Pxs-SA-M9X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="omT-SV-UkI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="left" id="ofB-pt-v04">
+                    <connections>
+                        <action selector="swipe_left_to_friends_list:" destination="k3h-va-DzQ" id="ujs-0K-jIW"/>
+                    </connections>
+                </swipeGestureRecognizer>
+                <swipeGestureRecognizer direction="right" id="6hY-gB-eg1">
+                    <connections>
+                        <action selector="swipe_right_to_search_list:" destination="k3h-va-DzQ" id="OAR-S3-EkU"/>
+                    </connections>
+                </swipeGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="460" y="-675.11244377811101"/>
         </scene>
