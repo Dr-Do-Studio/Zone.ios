@@ -1,10 +1,4 @@
-//
-//  LoginViewController.swift
-//  zone
-//
-//  Created by mac on 2018-10-15.
-//  Copyright © 2018 mac. All rights reserved.
-//
+
 
 import UIKit
 import Firebase
@@ -161,7 +155,7 @@ class RegistryViewController: UIViewController{
             else {
                 print ("reg successful")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalPageViewController") as! PersonalPageViewController
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalPageViewController") as! MainPageViewController
                 self.present(nextViewController, animated: true, completion: nil)
             }
         }

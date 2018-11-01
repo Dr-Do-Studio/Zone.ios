@@ -242,7 +242,7 @@ class LoginViewController: UIViewController{
             else {
                 print ("login successful")
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalPageViewController") as! PersonalPageViewController
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
                 self.present(nextViewController, animated: true, completion: nil)
             }
         }

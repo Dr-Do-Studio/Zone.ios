@@ -16,8 +16,9 @@
 		04008A61217556A2002C79F5 /* zoneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04008A60217556A2002C79F5 /* zoneUITests.swift */; };
 		04E14DC0217BFAD60087F402 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 04E14DBF217BFAD60087F402 /* GoogleService-Info.plist */; };
 		04E14DC2217E22EB0087F402 /* RegistryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E14DC1217E22EB0087F402 /* RegistryViewController.swift */; };
-		04E14DC4217FC0640087F402 /* PersonalPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E14DC3217FC0640087F402 /* PersonalPageViewController.swift */; };
+		04E14DC4217FC0640087F402 /* MainPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04E14DC3217FC0640087F402 /* MainPageViewController.swift */; };
 		04E14DC5217FC7DA0087F402 /* FirebaseCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04E14DC6217FC7DA0087F402 /* FirebaseCore.framework */; };
+		04FB6251218A38A800731588 /* PersonalProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04FB6250218A38A800731588 /* PersonalProfileViewController.swift */; };
 		F82ECBC2B896AB2455AB90B9 /* Pods_zone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F52AF02BB280233E9326225D /* Pods_zone.framework */; };
 /* End PBXBuildFile section */
 
@@ -54,8 +55,9 @@
 		04008A62217556A2002C79F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		04E14DBF217BFAD60087F402 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		04E14DC1217E22EB0087F402 /* RegistryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistryViewController.swift; sourceTree = "<group>"; };
-		04E14DC3217FC0640087F402 /* PersonalPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalPageViewController.swift; sourceTree = "<group>"; };
+		04E14DC3217FC0640087F402 /* MainPageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainPageViewController.swift; sourceTree = "<group>"; };
 		04E14DC6217FC7DA0087F402 /* FirebaseCore.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FirebaseCore.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		04FB6250218A38A800731588 /* PersonalProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalProfileViewController.swift; sourceTree = "<group>"; };
 		1343054B56247B6218583400 /* Pods_zoneTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_zoneTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		45F60D13EEF3F9BA63BD5F05 /* Pods-zone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zone.release.xcconfig"; path = "Pods/Target Support Files/Pods-zone/Pods-zone.release.xcconfig"; sourceTree = "<group>"; };
 		73179BF0E49D9B1E1E382D14 /* Pods-zone.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-zone.debug.xcconfig"; path = "Pods/Target Support Files/Pods-zone/Pods-zone.debug.xcconfig"; sourceTree = "<group>"; };
@@ -116,14 +118,15 @@
 			isa = PBXGroup;
 			children = (
 				04008A40217556A2002C79F5 /* AppDelegate.swift */,
-				04008A42217556A2002C79F5 /* LoginViewController.swift */,
 				04008A44217556A2002C79F5 /* Main.storyboard */,
 				04008A47217556A2002C79F5 /* Assets.xcassets */,
 				04008A49217556A2002C79F5 /* LaunchScreen.storyboard */,
 				04008A4C217556A2002C79F5 /* Info.plist */,
 				04E14DBF217BFAD60087F402 /* GoogleService-Info.plist */,
+				04008A42217556A2002C79F5 /* LoginViewController.swift */,
 				04E14DC1217E22EB0087F402 /* RegistryViewController.swift */,
-				04E14DC3217FC0640087F402 /* PersonalPageViewController.swift */,
+				04E14DC3217FC0640087F402 /* MainPageViewController.swift */,
+				04FB6250218A38A800731588 /* PersonalProfileViewController.swift */,
 			);
 			path = zone;
 			sourceTree = "<group>";
@@ -349,7 +352,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				04008A43217556A2002C79F5 /* LoginViewController.swift in Sources */,
-				04E14DC4217FC0640087F402 /* PersonalPageViewController.swift in Sources */,
+				04FB6251218A38A800731588 /* PersonalProfileViewController.swift in Sources */,
+				04E14DC4217FC0640087F402 /* MainPageViewController.swift in Sources */,
 				04E14DC2217E22EB0087F402 /* RegistryViewController.swift in Sources */,
 				04008A41217556A2002C79F5 /* AppDelegate.swift in Sources */,
 			);
