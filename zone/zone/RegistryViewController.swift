@@ -20,6 +20,8 @@ class RegistryViewController: UIViewController{
     
     var keyboard_height:CGFloat = 0
     
+    let ref = Database.database().reference()
+    
     @IBOutlet var email_field: UITextField!
     @IBOutlet var username_field: UITextField!
     @IBOutlet var password_field: UITextField!
@@ -154,8 +156,21 @@ class RegistryViewController: UIViewController{
             }
             else {
                 print ("reg successful")
+                let usersReference = self.ref.child("users")
+                let userinfo = ["username":self.username_field.text, "email":self.email_field.text]
+                usersReference.updateChildValues(userinfo, withCompletionBlock: {
+                    (err,ref) in
+                    if (err != nil){
+                        print(err)
+                        return
+                    }
+                    else {
+                        print("new user added")
+                    }
+                    
+                })
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalPageViewController") as! MainPageViewController
+                let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
                 self.present(nextViewController, animated: true, completion: nil)
             }
         }

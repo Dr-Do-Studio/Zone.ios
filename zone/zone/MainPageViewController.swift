@@ -1,5 +1,6 @@
 import UIKit
-
+import Firebase
+import FirebaseAuth
 
 class MainPageViewController: UIViewController,UIScrollViewDelegate {
     var screen_width:CGFloat = 0
@@ -16,6 +17,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("current user is " + (Auth.auth().currentUser?.email)!)
         screen_width = view.frame.width
         screen_height = view.frame.height
         print("screen width is \(screen_width)")
