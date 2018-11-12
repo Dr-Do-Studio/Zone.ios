@@ -156,7 +156,10 @@ class RegistryViewController: UIViewController{
             }
             else {
                 print ("reg successful")
-                let usersReference = self.ref.child("users")
+                guard let uid = Auth.auth().currentUser?.uid else{
+                    return
+                }
+                let usersReference = self.ref.child("users").child(uid)
                 let userinfo = ["username":self.username_field.text, "email":self.email_field.text]
                 usersReference.updateChildValues(userinfo, withCompletionBlock: {
                     (err,ref) in
@@ -169,6 +172,7 @@ class RegistryViewController: UIViewController{
                     }
                     
                 })
+                //try! Auth.auth().signOut()
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 let nextViewController = storyBoard.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
                 self.present(nextViewController, animated: true, completion: nil)
