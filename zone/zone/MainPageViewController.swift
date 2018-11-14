@@ -2,6 +2,8 @@ import UIKit
 import Firebase
 import FirebaseAuth
 
+var global_user_name = "default_user"
+
 class MainPageViewController: UIViewController,UIScrollViewDelegate {
     var screen_width:CGFloat = 0
     var screen_height:CGFloat = 0
@@ -13,6 +15,9 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
     
     let scrollView = UIScrollView()
     var pageControl : UIPageControl = UIPageControl(frame:CGRect(x: 50, y: 300, width: 200, height: 50))
+    
+    let ref = Database.database().reference()
+    let uid = Auth.auth().currentUser?.uid
     
     
     override func viewDidLoad() {
@@ -53,6 +58,20 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         
         portrait_button.addTarget(self, action: #selector(didButtonClick), for: .touchUpInside)
         
+        grab_info_from_db()
+        
+    }
+    
+    func grab_info_from_db(){
+        ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
+            let user = snapshot.value as! [String:AnyObject]
+            //print(user["username"] as! String)
+            global_user_name = user["username"] as! String
+            print("in func")
+            print(global_user_name)
+        }) { (error) in
+            print(error.localizedDescription)
+        }
     }
     
     @objc func didButtonClick(_ sender: UIButton) {

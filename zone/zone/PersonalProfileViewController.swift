@@ -16,7 +16,6 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     var edit_button = UIButton()
     var name_tag = UILabel()
     
-    var username = String()
 
     @IBOutlet var scroll: UIScrollView!
     
@@ -51,26 +50,18 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         settings_button.frame = CGRect(x: screen_width*8/10, y: screen_width/10, width: screen_width/10, height: screen_width/10)
         settings_button.backgroundColor = .black
         self.scroll.addSubview(settings_button)
+        settings_button.addTarget(self, action: #selector(setting), for: .touchUpInside)
         
         edit_button.frame = CGRect(x: screen_width*8/10, y: screen_width/2, width: screen_width/10, height: screen_width/10)
         edit_button.backgroundColor = .black
         self.scroll.addSubview(edit_button)
         
+        name_tag.text = global_user_name
         
-        
-        ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
-            let user = snapshot.value as! [String:AnyObject]
-            //print(user["username"] as! String)
-            self.username = user["username"] as! String
-            print(self.username)
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-        
-        name_tag.text = username
-        name_tag.frame = CGRect(x: screen_width/2-portrait_size/2, y: portrait_button.frame.origin.y + portrait_button.frame.size.height + 20, width: portrait_size, height: 20)
+        name_tag.frame = CGRect(x: screen_width/2-portrait_size/2, y: portrait_button.frame.origin.y + portrait_button.frame.size.height + 30, width: portrait_size, height: 20)
         name_tag.textAlignment = .center
         self.scroll.addSubview(name_tag)
+        
         
     }
     
@@ -81,8 +72,8 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         self.present(nextViewController, animated: true, completion: nil)
     }
     
-    @objc func addData(){
-        
+    @objc func setting(){
+        print(global_user_name)
     }
     
     func scrollViewDidScroll(_ scroll: UIScrollView) {
