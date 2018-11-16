@@ -3,6 +3,7 @@ import Firebase
 import FirebaseAuth
 
 var global_user_name = "default_user"
+var global_portrait = UIImage()
 
 class MainPageViewController: UIViewController,UIScrollViewDelegate {
     var screen_width:CGFloat = 0

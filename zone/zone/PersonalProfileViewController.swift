@@ -37,7 +37,7 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         portrait_button.clipsToBounds = true
         portrait_button.contentMode = .scaleToFill
         portrait_button.setImage(#imageLiteral(resourceName: "default_portrait.jpg"), for: .normal)
-        //portrait_button.addTarget(self, action: #selector(returnToMain), for: .touchUpInside)
+        portrait_button.addTarget(self, action: #selector(handleSelectProfileImageView), for: .touchUpInside)
         
         self.scroll.addSubview(portrait_button)
         
@@ -64,6 +64,9 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         
         
     }
+    
+   
+    
     
     @objc func returnToMain(){
         
