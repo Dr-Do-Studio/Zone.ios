@@ -40,7 +40,8 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         portrait_button.layer.cornerRadius = 0.5 * portrait_button.bounds.size.width
         portrait_button.clipsToBounds = true
         portrait_button.contentMode = .scaleToFill
-        
+        portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
+        portrait_button.isUserInteractionEnabled = true
         
         let imageURL = storage_ref.child(uid!).child("ProfileImage.png")
         print(imageURL)

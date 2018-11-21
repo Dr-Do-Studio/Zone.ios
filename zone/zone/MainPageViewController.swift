@@ -1,6 +1,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseUI
 
 var global_user_name = "default_user"
 var global_portrait = UIImage()
@@ -9,7 +10,7 @@ var global_uid = ""
 class MainPageViewController: UIViewController,UIScrollViewDelegate {
     var screen_width:CGFloat = 0
     var screen_height:CGFloat = 0
-    var portrait_button = UIButton()
+    var portrait_button = UIImageView()
     var portrait_size:CGFloat = 0
     
     var search_friends_label = UILabel()
@@ -21,6 +22,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
     let ref = Database.database().reference()
     let uid = Auth.auth().currentUser?.uid
     
+    let storage_ref = Storage.storage().reference()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,7 +38,25 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         portrait_button.layer.cornerRadius = 0.5 * portrait_button.bounds.size.width
         portrait_button.clipsToBounds = true
         portrait_button.contentMode = .scaleToFill
-        portrait_button.setImage(#imageLiteral(resourceName: "default_portrait.jpg"), for: .normal)
+        portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(goToPersonalProfile)))
+        portrait_button.isUserInteractionEnabled = true
+        
+        let imageURL = storage_ref.child(uid!).child("ProfileImage.png")
+        print(imageURL)
+        imageURL.downloadURL(completion: { (url, error) in
+            if error != nil {
+                print("haha")
+                print(error?.localizedDescription)
+                self.portrait_button.image = #imageLiteral(resourceName: "default_portrait.jpg")
+                return
+            }
+                //Now you can start downloading the image or any file from the storage using URLSession.
+            else{
+                
+                let placeholderImage = UIImage(named: "placeholder.jpg")
+                self.portrait_button.sd_setImage(with: imageURL, placeholderImage: placeholderImage)
+            }
+        })
         
         search_friends_label.text = "friends searching"
         search_friends_label.frame = CGRect(x: screen_width/2-50, y: screen_height/2, width: 100, height: 20)
@@ -58,8 +78,6 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
         scrollView.contentOffset.x = screen_width
         
-        portrait_button.addTarget(self, action: #selector(didButtonClick), for: .touchUpInside)
-        
         grab_info_from_db()
         
     }
@@ -77,12 +95,10 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         }
     }
     
-    @objc func didButtonClick(_ sender: UIButton) {
-        if sender === portrait_button {
-            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalProfileViewController") as! PersonalProfileViewController
-            self.present(nextViewController, animated: true, completion: nil)
-        }
+    @objc func goToPersonalProfile(_ sender: Any) {
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalProfileViewController") as!PersonalProfileViewController
+        self.present(nextViewController, animated: true, completion: nil)
     }
     
     func configurePageControl() {
