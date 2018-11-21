@@ -4,6 +4,7 @@ import FirebaseAuth
 
 var global_user_name = "default_user"
 var global_portrait = UIImage()
+var global_uid = ""
 
 class MainPageViewController: UIViewController,UIScrollViewDelegate {
     var screen_width:CGFloat = 0
@@ -68,6 +69,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
             let user = snapshot.value as! [String:AnyObject]
             //print(user["username"] as! String)
             global_user_name = user["username"] as! String
+            global_uid = self.uid!
             print("in func")
             print(global_user_name)
         }) { (error) in

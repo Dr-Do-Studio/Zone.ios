@@ -1,8 +1,10 @@
 
-
 import UIKit
+import Firebase
+import FirebaseAuth
 
 extension PersonalProfileViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+    
     @objc func handleSelectProfileImageView(){
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -20,8 +22,29 @@ extension PersonalProfileViewController:UIImagePickerControllerDelegate,UINaviga
         else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage{
             selectedImage = originalImage
         }
-        portrait_button.setImage(selectedImage, for: .normal)
+        portrait_button.image = selectedImage
+        if let uploadImage = UIImagePNGRepresentation(selectedImage!){
+            storage_ref.child(global_uid+"/ProfileImage.png").putData(uploadImage, metadata: nil, completion: {
+                (metadata, error) in
+                if (error != nil){
+                    print(error)
+                    return
+                }
+                print("show me metadata")
+                print(metadata)
+            })
+        }
+        
+        //let user = ref.child("users").child(uid!).setValue(["profileImageUrl":metadata.downloadUrl])
+        
+        
+        
+        
+        
+        
         dismiss(animated: true, completion: nil)
+        
+        
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {

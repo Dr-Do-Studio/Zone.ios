@@ -1,6 +1,8 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseUI
+
 
 class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     var screen_width:CGFloat = 0
@@ -8,7 +10,7 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     let ref = Database.database().reference()
     let uid = Auth.auth().currentUser?.uid
     
-    var portrait_button = UIButton()
+    var portrait_button = UIImageView()
     var portrait_size:CGFloat = 0
     
     var back_to_menu_button = UIButton()
@@ -18,6 +20,8 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     
 
     @IBOutlet var scroll: UIScrollView!
+    
+    let storage_ref = Storage.storage().reference()
     
     let temp_but = UIButton()
     override func viewDidLoad() {
@@ -36,8 +40,31 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         portrait_button.layer.cornerRadius = 0.5 * portrait_button.bounds.size.width
         portrait_button.clipsToBounds = true
         portrait_button.contentMode = .scaleToFill
-        portrait_button.setImage(#imageLiteral(resourceName: "default_portrait.jpg"), for: .normal)
-        portrait_button.addTarget(self, action: #selector(handleSelectProfileImageView), for: .touchUpInside)
+        
+        
+        let imageURL = storage_ref.child(uid!).child("ProfileImage.png")
+        print(imageURL)
+        imageURL.downloadURL(completion: { (url, error) in
+            
+            if error != nil {
+                print("haha")
+                print(error?.localizedDescription)
+                self.portrait_button.image = #imageLiteral(resourceName: "default_portrait.jpg")
+                return
+            }
+            
+            //Now you can start downloading the image or any file from the storage using URLSession.
+            else{
+                
+                let placeholderImage = UIImage(named: "placeholder.jpg")
+                
+                self.portrait_button.sd_setImage(with: imageURL, placeholderImage: placeholderImage)
+                
+                
+                
+            }
+            
+        })
         
         self.scroll.addSubview(portrait_button)
         
