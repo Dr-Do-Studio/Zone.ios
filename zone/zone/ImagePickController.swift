@@ -2,6 +2,7 @@
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseUI
 
 extension PersonalProfileViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate{
     

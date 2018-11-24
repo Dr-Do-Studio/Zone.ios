@@ -4,7 +4,7 @@ import FirebaseAuth
 import FirebaseUI
 
 var global_user_name = "default_user"
-var global_portrait = UIImage()
+var global_portrait:UIImage? = nil
 var global_uid = ""
 
 class MainPageViewController: UIViewController,UIScrollViewDelegate {
@@ -52,9 +52,9 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
             }
                 //Now you can start downloading the image or any file from the storage using URLSession.
             else{
-                
-                let placeholderImage = UIImage(named: "placeholder.jpg")
-                self.portrait_button.sd_setImage(with: imageURL, placeholderImage: placeholderImage)
+                self.portrait_button.sd_setImage(with: imageURL, placeholderImage: global_portrait)
+                global_portrait = self.portrait_button.image
+                print(global_portrait)
             }
         })
         

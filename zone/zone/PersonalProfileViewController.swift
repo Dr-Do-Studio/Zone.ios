@@ -9,6 +9,7 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     var screen_height:CGFloat = 0
     let ref = Database.database().reference()
     let uid = Auth.auth().currentUser?.uid
+    let storage_ref = Storage.storage().reference()
     
     var portrait_button = UIImageView()
     var portrait_size:CGFloat = 0
@@ -18,10 +19,12 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     var edit_button = UIButton()
     var name_tag = UILabel()
     
+    var fb_button = UIButton()
+    
 
     @IBOutlet var scroll: UIScrollView!
     
-    let storage_ref = Storage.storage().reference()
+   
     
     let temp_but = UIButton()
     override func viewDidLoad() {
@@ -42,30 +45,8 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         portrait_button.contentMode = .scaleToFill
         portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
         portrait_button.isUserInteractionEnabled = true
-        
-        let imageURL = storage_ref.child(uid!).child("ProfileImage.png")
-        print(imageURL)
-        imageURL.downloadURL(completion: { (url, error) in
-            
-            if error != nil {
-                print("haha")
-                print(error?.localizedDescription)
-                self.portrait_button.image = #imageLiteral(resourceName: "default_portrait.jpg")
-                return
-            }
-            
-            //Now you can start downloading the image or any file from the storage using URLSession.
-            else{
-                
-                let placeholderImage = UIImage(named: "placeholder.jpg")
-                
-                self.portrait_button.sd_setImage(with: imageURL, placeholderImage: placeholderImage)
-                
-                
-                
-            }
-            
-        })
+        print(global_portrait)
+        portrait_button.image = global_portrait
         
         self.scroll.addSubview(portrait_button)
         
@@ -89,6 +70,8 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         name_tag.frame = CGRect(x: screen_width/2-portrait_size/2, y: portrait_button.frame.origin.y + portrait_button.frame.size.height + 30, width: portrait_size, height: 20)
         name_tag.textAlignment = .center
         self.scroll.addSubview(name_tag)
+        
+        
         
         
     }
