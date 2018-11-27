@@ -3,9 +3,7 @@ import Firebase
 import FirebaseAuth
 import FirebaseUI
 
-var global_user_name = "default_user"
-var global_portrait:UIImage? = nil
-var global_uid = ""
+
 
 class MainPageViewController: UIViewController,UIScrollViewDelegate {
     var screen_width:CGFloat = 0
@@ -21,7 +19,6 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
     
     let ref = Database.database().reference()
     let uid = Auth.auth().currentUser?.uid
-    
     let storage_ref = Storage.storage().reference()
     
     override func viewDidLoad() {

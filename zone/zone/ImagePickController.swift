@@ -23,7 +23,7 @@ extension PersonalProfileViewController:UIImagePickerControllerDelegate,UINaviga
         else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage{
             selectedImage = originalImage
         }
-        portrait_button.image = selectedImage
+        self.portrait_button.image = selectedImage
         if let uploadImage = UIImagePNGRepresentation(selectedImage!){
             storage_ref.child(global_uid+"/ProfileImage.png").putData(uploadImage, metadata: nil, completion: {
                 (metadata, error) in
@@ -32,6 +32,7 @@ extension PersonalProfileViewController:UIImagePickerControllerDelegate,UINaviga
                     return
                 }
                 print("show me metadata")
+                
                 print(metadata)
             })
         }
