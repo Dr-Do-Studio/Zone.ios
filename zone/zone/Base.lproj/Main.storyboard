@@ -40,6 +40,54 @@
             </objects>
             <point key="canvasLocation" x="-1076" y="606.74662668665667"/>
         </scene>
+        <!--Media View Controller-->
+        <scene sceneID="rTG-gb-ceC">
+            <objects>
+                <viewController storyboardIdentifier="MediaViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="TZU-0g-bEu" customClass="MediaViewController" customModule="zone" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dE7-10-mKa">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="default" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="whj-L1-kfn">
+                                <rect key="frame" x="166" y="323" width="54" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CDg-9t-KQ0">
+                                <rect key="frame" x="49" y="69" width="34" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="back"/>
+                                <connections>
+                                    <segue destination="zZ7-NB-Brf" kind="modal" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="nrH-HF-5nk"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XEx-xx-SMM">
+                                <rect key="frame" x="291" y="69" width="30" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="edit"/>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sSb-uv-PEY">
+                                <rect key="frame" x="171" y="135" width="32" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="save"/>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="fgp-hy-s1g"/>
+                    </view>
+                    <connections>
+                        <outlet property="back_button" destination="CDg-9t-KQ0" id="cGz-6K-foG"/>
+                        <outlet property="edit_username" destination="XEx-xx-SMM" id="uf5-oN-fMK"/>
+                        <outlet property="id_label" destination="whj-L1-kfn" id="Bug-jy-dB1"/>
+                        <outlet property="save_button" destination="sSb-uv-PEY" id="JFq-dP-RKd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="s0m-0R-oBh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-46" y="969"/>
+        </scene>
         <!--Personal Profile View Controller-->
         <scene sceneID="Kkb-ww-VKy">
             <objects>
@@ -56,6 +104,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="jaM-BV-IL7"/>
                     </view>
+                    <navigationItem key="navigationItem" id="rjF-hZ-XOy"/>
                     <connections>
                         <outlet property="scroll" destination="glQ-hI-DLt" id="uKn-TJ-w0v"/>
                     </connections>

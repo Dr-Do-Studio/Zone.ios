@@ -85,6 +85,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
             //print(user["username"] as! String)
             global_user_name = user["username"] as! String
             global_uid = self.uid!
+            global_fb_account = user["fb_account"] as! String
             print("in func")
             print(global_user_name)
         }) { (error) in

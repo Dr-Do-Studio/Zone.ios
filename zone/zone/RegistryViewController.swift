@@ -168,6 +168,7 @@ class RegistryViewController: UIViewController{
                         return
                     }
                     else {
+                        usersReference.child("fb_account").setValue("default_fb_account")
                         print("new user added")
                     }
                     

@@ -71,12 +71,23 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         name_tag.textAlignment = .center
         self.scroll.addSubview(name_tag)
         
-        
-        
+        fb_button.frame = CGRect(x: screen_width/10, y: name_tag.frame.origin.y + name_tag.frame.size.height + 10, width: screen_width/10, height: screen_width/10)
+        fb_button.setImage(#imageLiteral(resourceName: "fb_icon.png"), for: .normal)
+        self.scroll.addSubview(fb_button)
+        fb_button.addTarget(self, action: #selector(fb_info), for: .touchUpInside)
         
     }
     
-   
+    @objc func fb_info(){
+        social_media_info(media_name: "facebook")
+    }
+    
+    func social_media_info(media_name: String){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MediaViewController") as! MediaViewController
+        nextViewController.media_type = media_name
+        self.present(nextViewController, animated: true, completion: nil)
+    }
     
     
     @objc func returnToMain(){
