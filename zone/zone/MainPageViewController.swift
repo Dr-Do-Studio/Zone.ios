@@ -5,7 +5,8 @@ import FirebaseUI
 
 
 
-class MainPageViewController: UIViewController,UIScrollViewDelegate {
+class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableViewDelegate,UITableViewDataSource{
+    
     var screen_width:CGFloat = 0
     var screen_height:CGFloat = 0
     var portrait_button = UIImageView()
@@ -15,11 +16,14 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
     var my_friends_label = UILabel()
     
     let scrollView = UIScrollView()
+    let usersTable = UITableView()
     var pageControl : UIPageControl = UIPageControl(frame:CGRect(x: 50, y: 300, width: 200, height: 50))
     
     let ref = Database.database().reference()
     let uid = Auth.auth().currentUser?.uid
     let storage_ref = Storage.storage().reference()
+    
+    var userList = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,11 +42,13 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(goToPersonalProfile)))
         portrait_button.isUserInteractionEnabled = true
         
+
+        
         let imageURL = storage_ref.child(uid!).child("ProfileImage.png")
         print(imageURL)
         imageURL.downloadURL(completion: { (url, error) in
             if error != nil {
-                print("haha")
+                print("set image to default portrait")
                 print(error?.localizedDescription)
                 self.portrait_button.image = #imageLiteral(resourceName: "default_portrait.jpg")
                 return
@@ -63,6 +69,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         
         scrollView.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
         scrollView.delegate = self
+        //usersTable.delegate = self
         self.scrollView.isPagingEnabled = true
         self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width * 3, height: self.scrollView.frame.size.height)
         configurePageControl()
@@ -77,21 +84,52 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         
         grab_info_from_db()
         
+        usersTable.frame = CGRect(x: 0, y: screen_height*0.1, width: screen_width, height: screen_height)
+        self.scrollView.addSubview(usersTable)
+        
+        usersTable.dataSource = self
+        
+        
     }
     
     func grab_info_from_db(){
         ref.child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
-            let user = snapshot.value as! [String:AnyObject]
+            let cur_user = snapshot.value as! [String:AnyObject]
             //print(user["username"] as! String)
-            global_user_name = user["username"] as! String
+            global_user_name = cur_user["username"] as! String
             global_uid = self.uid!
-            global_fb_account = user["fb_account"] as! String
+            global_fb_account = cur_user["fb_account"] as! String
             print("in func")
             print(global_user_name)
         }) { (error) in
             print(error.localizedDescription)
         }
+        
+        ref.child("users").observe(.childAdded, with: {
+            (snapshot) in
+            let temp_user = User()
+            let dictionary = snapshot.value as! [String:AnyObject]
+            print(dictionary)
+            
+            temp_user.fb_account = dictionary["fb_account"] as! String
+            temp_user.username = dictionary["username"] as! String
+            temp_user.email = dictionary["email"] as! String
+            print("detected")
+            self.userList.append(temp_user)
+            print(temp_user)
+            
+            /*self.usersTable.beginUpdates()
+            self.usersTable.insertRows(at: [IndexPath(row: 0, section: 0)], with: .automatic)
+            self.usersTable.endUpdates()*/
+            DispatchQueue.main.async {
+                self.usersTable.reloadData()
+            }
+        }, withCancel: nil)
+        
+        
     }
+    
+    
     
     @objc func goToPersonalProfile(_ sender: Any) {
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
@@ -119,6 +157,25 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate {
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
     }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return userList.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == usersTable{
+            
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+            let temp_user = userList[indexPath.row]
+            cell.textLabel?.text = temp_user.username
+            return cell
+        }
+        return UITableViewCell()
+    }
+    
+    
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

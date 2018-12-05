@@ -12,6 +12,8 @@ target ‘zone’ do
   pod ‘Firebase/Auth’
   pod ‘Firebase/Storage’
   pod 'FirebaseUI/Storage'
+  pod 'GoogleMaps'
+  pod 'GooglePlaces'
   
 
 

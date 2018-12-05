@@ -21,6 +21,9 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     
     var fb_button = UIButton()
     
+    
+    var map_button = UIButton()
+    
 
     @IBOutlet var scroll: UIScrollView!
     
@@ -76,6 +79,10 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         self.scroll.addSubview(fb_button)
         fb_button.addTarget(self, action: #selector(fb_info), for: .touchUpInside)
         
+        map_button.frame = CGRect(x: screen_width/10, y: fb_button.frame.origin.y + fb_button.frame.size.height + 10, width: screen_width/10, height: screen_width/10)
+        map_button.setImage(#imageLiteral(resourceName: "map_icon.png"), for: .normal)
+        self.scroll.addSubview(map_button)
+        map_button.addTarget(self, action: #selector(show_me_the_map), for: .touchUpInside)
     }
     
     @objc func fb_info(){
@@ -94,6 +101,12 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MainPageViewController") as! MainPageViewController
+        self.present(nextViewController, animated: true, completion: nil)
+    }
+    
+    @objc func show_me_the_map(){
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MapViewController") as! MapViewController
         self.present(nextViewController, animated: true, completion: nil)
     }
     
