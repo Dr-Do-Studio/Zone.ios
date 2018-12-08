@@ -5,7 +5,9 @@ import FirebaseUI
 
 
 
-class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableViewDelegate,UITableViewDataSource{
+class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableViewDelegate,UITableViewDataSource, UISearchResultsUpdating{
+    
+    
     
     var screen_width:CGFloat = 0
     var screen_height:CGFloat = 0
@@ -17,6 +19,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     
     let scrollView = UIScrollView()
     let usersTable = UITableView()
+    let usersSearch = UISearchController(searchResultsController: nil)
     var pageControl : UIPageControl = UIPageControl(frame:CGRect(x: 50, y: 300, width: 200, height: 50))
     
     let ref = Database.database().reference()
@@ -24,6 +27,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     let storage_ref = Storage.storage().reference()
     
     var userList = [User]()
+    var filteredUserList = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +73,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
         
         scrollView.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
         scrollView.delegate = self
+        //usersSearch.delegate = self
         //usersTable.delegate = self
         self.scrollView.isPagingEnabled = true
         self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width * 3, height: self.scrollView.frame.size.height)
@@ -84,10 +89,17 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
         
         grab_info_from_db()
         
-        usersTable.frame = CGRect(x: 0, y: screen_height*0.1, width: screen_width, height: screen_height)
+        usersTable.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
         self.scrollView.addSubview(usersTable)
         
         usersTable.dataSource = self
+        
+        
+        
+        usersSearch.searchResultsUpdater = self
+        usersTable.tableHeaderView = usersSearch.searchBar
+        usersSearch.hidesNavigationBarDuringPresentation = false
+        usersSearch.dimsBackgroundDuringPresentation = false
         
         
     }
@@ -116,6 +128,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
             temp_user.email = dictionary["email"] as! String
             print("detected")
             self.userList.append(temp_user)
+            self.filteredUserList.append(temp_user)
             print(temp_user)
             
             /*self.usersTable.beginUpdates()
@@ -159,20 +172,36 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return userList.count
+        return filteredUserList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == usersTable{
             
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
-            let temp_user = userList[indexPath.row]
+            let temp_user = filteredUserList[indexPath.row]
             cell.textLabel?.text = temp_user.username
             return cell
         }
         return UITableViewCell()
     }
     
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = usersSearch.searchBar.text, !searchText.isEmpty {
+            filteredUserList = userList.filter{
+                ($0.username?.lowercased().contains(searchText.lowercased()))!
+                
+            }
+            
+            /*filteredNFLTeams = unfilteredNFLTeams.filter { team in
+                return team.lowercased().contains(searchText.lowercased())
+            }*/
+            
+        } else {
+            filteredUserList = userList
+        }
+        self.usersTable.reloadData()
+    }
     
     
     

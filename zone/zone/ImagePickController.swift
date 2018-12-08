@@ -13,7 +13,7 @@ extension PersonalProfileViewController:UIImagePickerControllerDelegate,UINaviga
         self.present(picker,animated: true,completion:nil)
         
     }
-    
+                      
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         var selectedImage:UIImage?
         print("picker")
