@@ -74,7 +74,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
         scrollView.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
         scrollView.delegate = self
         //usersSearch.delegate = self
-        //usersTable.delegate = self
+        usersTable.delegate = self
         self.scrollView.isPagingEnabled = true
         self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width * 3, height: self.scrollView.frame.size.height)
         configurePageControl()
@@ -203,6 +203,20 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
         self.usersTable.reloadData()
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == usersTable{
+            let temp_user = filteredUserList[indexPath.row]
+            print(temp_user.username)
+            
+            let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalProfileViewController") as!PersonalProfileViewController
+            nextViewController.friendUser = self.filteredUserList[indexPath.row]
+            nextViewController.profileMode = 1
+            self.present(nextViewController, animated: true, completion: nil)
+        }
+        /**/
+        
+    }
     
     
     

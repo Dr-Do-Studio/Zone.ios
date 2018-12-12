@@ -3,8 +3,9 @@ import Firebase
 import FirebaseAuth
 import FirebaseUI
 
-
 class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
+    var profileMode = 0 //0(default) as personal profile, 1 as friends profile
+    var friendUser = User()
     var screen_width:CGFloat = 0
     var screen_height:CGFloat = 0
     let ref = Database.database().reference()
@@ -20,21 +21,27 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     var name_tag = UILabel()
     
     var fb_button = UIButton()
-    
-    
     var map_button = UIButton()
-    
-
     @IBOutlet var scroll: UIScrollView!
-    
-   
-    
     let temp_but = UIButton()
     override func viewDidLoad() {
         screen_width = view.frame.width
         screen_height = view.frame.height
         let user = ref.child("users").child(uid!)
         super.viewDidLoad()
+        
+        if profileMode == 0 {
+            portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
+            portrait_button.isUserInteractionEnabled = true
+            portrait_button.image = global_portrait
+            self.scroll.addSubview(settings_button)
+            self.scroll.addSubview(edit_button)
+            name_tag.text = global_user_name
+        }
+        if profileMode == 1{
+            portrait_button.image = #imageLiteral(resourceName: "default_portrait.jpg")
+            name_tag.text = friendUser.username
+        }
         
         scroll.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
         scroll.delegate = self
@@ -46,10 +53,7 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         portrait_button.layer.cornerRadius = 0.5 * portrait_button.bounds.size.width
         portrait_button.clipsToBounds = true
         portrait_button.contentMode = .scaleToFill
-        portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
-        portrait_button.isUserInteractionEnabled = true
-        print(global_portrait)
-        portrait_button.image = global_portrait
+        
         
         self.scroll.addSubview(portrait_button)
         
@@ -61,14 +65,14 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         
         settings_button.frame = CGRect(x: screen_width*8/10, y: screen_width/10, width: screen_width/10, height: screen_width/10)
         settings_button.backgroundColor = .black
-        self.scroll.addSubview(settings_button)
+        
         settings_button.addTarget(self, action: #selector(setting), for: .touchUpInside)
         
         edit_button.frame = CGRect(x: screen_width*8/10, y: screen_width/2, width: screen_width/10, height: screen_width/10)
         edit_button.backgroundColor = .black
-        self.scroll.addSubview(edit_button)
         
-        name_tag.text = global_user_name
+        
+        
         
         name_tag.frame = CGRect(x: screen_width/2-portrait_size/2, y: portrait_button.frame.origin.y + portrait_button.frame.size.height + 30, width: portrait_size, height: 20)
         name_tag.textAlignment = .center
@@ -93,6 +97,10 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MediaViewController") as! MediaViewController
         nextViewController.media_type = media_name
+        nextViewController.profileMode = self.profileMode
+        if profileMode == 1{
+            nextViewController.friendUser = self.friendUser
+        }
         self.present(nextViewController, animated: true, completion: nil)
     }
     

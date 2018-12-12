@@ -59,9 +59,6 @@
                                 <rect key="frame" x="49" y="69" width="34" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="back"/>
-                                <connections>
-                                    <segue destination="zZ7-NB-Brf" kind="modal" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="nrH-HF-5nk"/>
-                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XEx-xx-SMM">
                                 <rect key="frame" x="291" y="69" width="30" height="30"/>
