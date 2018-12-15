@@ -11,5 +11,5 @@ class User:NSObject{
     var fb_account: String?
     var username: String?
     var email: String?
-    
+    var uid: String?
 }

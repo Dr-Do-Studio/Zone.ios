@@ -3,7 +3,7 @@ import Firebase
 import FirebaseAuth
 
 class MediaViewController: UIViewController,UITextViewDelegate{
-    var profileMode = 0 //0 as personal profile, 1 as friends profile
+    var profileMode = DEFAULT_PROFILE_MODE //0 as personal profile, 1 as friends profile
     var friendUser = User()
 
     var media_type: String = ""
@@ -37,14 +37,14 @@ class MediaViewController: UIViewController,UITextViewDelegate{
         save_button.addTarget(self, action: #selector(save_account_info), for: .touchUpInside)
         back_button.addTarget(self, action: #selector(go_back), for: .touchUpInside)
         
-        if profileMode == 1 {
+        if profileMode == FRIEND_PROFILE_MODE {
             print("now in friend's profile")
             save_button.removeFromSuperview()
             edit_username.removeFromSuperview()
             if media_type == "facebook"{
                 id_label.text = self.friendUser.fb_account
             }
-        } else if profileMode == 0{
+        } else if profileMode == DEFAULT_PROFILE_MODE{
             print("now in my own profile")
             if media_type == "facebook"{
                 id_label.text = global_fb_account
@@ -84,7 +84,7 @@ class MediaViewController: UIViewController,UITextViewDelegate{
         let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalProfileViewController") as!PersonalProfileViewController
         nextViewController.friendUser = self.friendUser
-        nextViewController.profileMode = 1
+        nextViewController.profileMode = self.profileMode
         self.present(nextViewController, animated: true, completion: nil)
     }
     

@@ -4,7 +4,7 @@ import FirebaseAuth
 import FirebaseUI
 
 class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
-    var profileMode = 0 //0(default) as personal profile, 1 as friends profile
+    var profileMode = DEFAULT_PROFILE_MODE //0(default) as personal profile, 1 as friends profile
     var friendUser = User()
     var screen_width:CGFloat = 0
     var screen_height:CGFloat = 0
@@ -20,6 +20,8 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     var edit_button = UIButton()
     var name_tag = UILabel()
     
+    var add_friends_button = UIButton()
+    
     var fb_button = UIButton()
     var map_button = UIButton()
     @IBOutlet var scroll: UIScrollView!
@@ -30,7 +32,7 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         let user = ref.child("users").child(uid!)
         super.viewDidLoad()
         
-        if profileMode == 0 {
+        if profileMode == DEFAULT_PROFILE_MODE {
             portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
             portrait_button.isUserInteractionEnabled = true
             portrait_button.image = global_portrait
@@ -38,9 +40,10 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
             self.scroll.addSubview(edit_button)
             name_tag.text = global_user_name
         }
-        if profileMode == 1{
+        if profileMode == FRIEND_PROFILE_MODE{
             portrait_button.image = #imageLiteral(resourceName: "default_portrait.jpg")
             name_tag.text = friendUser.username
+            self.scroll.addSubview(add_friends_button)
         }
         
         scroll.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
@@ -67,6 +70,10 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         settings_button.backgroundColor = .black
         
         settings_button.addTarget(self, action: #selector(setting), for: .touchUpInside)
+        
+        add_friends_button.frame = settings_button.frame
+        add_friends_button.backgroundColor = .red
+        add_friends_button.addTarget(self, action: #selector(add_friend), for: .touchUpInside)
         
         edit_button.frame = CGRect(x: screen_width*8/10, y: screen_width/2, width: screen_width/10, height: screen_width/10)
         edit_button.backgroundColor = .black
@@ -98,7 +105,7 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
         let nextViewController = storyBoard.instantiateViewController(withIdentifier: "MediaViewController") as! MediaViewController
         nextViewController.media_type = media_name
         nextViewController.profileMode = self.profileMode
-        if profileMode == 1{
+        if profileMode == FRIEND_PROFILE_MODE{
             nextViewController.friendUser = self.friendUser
         }
         self.present(nextViewController, animated: true, completion: nil)
@@ -120,6 +127,13 @@ class PersonalProfileViewController: UIViewController,UIScrollViewDelegate{
     
     @objc func setting(){
         print(global_user_name)
+    }
+    
+    @objc func add_friend(){
+        print("attempt to add friend")
+        Database.database().reference().child("users").child(global_uid).child("friendlist").child(friendUser.uid!).setValue("true")
+        Database.database().reference().child("users").child(friendUser.uid!).child("friendlist").child(global_uid).setValue("true")
+        print("friends has been added")
     }
     
     func scrollViewDidScroll(_ scroll: UIScrollView) {

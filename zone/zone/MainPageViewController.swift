@@ -19,6 +19,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     
     let scrollView = UIScrollView()
     let usersTable = UITableView()
+    let friendsTable = UITableView()
     let usersSearch = UISearchController(searchResultsController: nil)
     var pageControl : UIPageControl = UIPageControl(frame:CGRect(x: 50, y: 300, width: 200, height: 50))
     
@@ -28,6 +29,8 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     
     var userList = [User]()
     var filteredUserList = [User]()
+    var friendsIDList = [String]()
+    var friendsList = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,16 +68,17 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
             }
         })
         
-        search_friends_label.text = "friends searching"
-        search_friends_label.frame = CGRect(x: screen_width/2-50, y: screen_height/2, width: 100, height: 20)
-        my_friends_label.text = "my friends"
-        my_friends_label.frame = CGRect(x: screen_width*5/2-50, y: screen_height/2, width: 100, height: 20)
+//        search_friends_label.text = "friends searching"
+//        search_friends_label.frame = CGRect(x: screen_width/2-50, y: screen_height/2, width: 100, height: 20)
+//        my_friends_label.text = "my friends"
+//        my_friends_label.frame = CGRect(x: screen_width*5/2-50, y: screen_height/2, width: 100, height: 20)
         
         
         scrollView.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
         scrollView.delegate = self
         //usersSearch.delegate = self
         usersTable.delegate = self
+        friendsTable.delegate = self
         self.scrollView.isPagingEnabled = true
         self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width * 3, height: self.scrollView.frame.size.height)
         configurePageControl()
@@ -82,8 +86,8 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
         print(portrait_button.frame)
         self.view.addSubview(scrollView)
         self.scrollView.addSubview(portrait_button)
-        self.scrollView.addSubview(search_friends_label)
-        self.scrollView.addSubview(my_friends_label)
+        //self.scrollView.addSubview(search_friends_label)
+        //self.scrollView.addSubview(my_friends_label)
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
         scrollView.contentOffset.x = screen_width
         
@@ -94,7 +98,9 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
         
         usersTable.dataSource = self
         
-        
+        friendsTable.frame = CGRect(x: 2*screen_width, y: 0, width: screen_width, height: screen_height)
+        self.scrollView.addSubview(friendsTable)
+        friendsTable.dataSource = self
         
         usersSearch.searchResultsUpdater = self
         usersTable.tableHeaderView = usersSearch.searchBar
@@ -121,11 +127,12 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
             (snapshot) in
             let temp_user = User()
             let dictionary = snapshot.value as! [String:AnyObject]
-            print(dictionary)
+            //print(dictionary)
             
             temp_user.fb_account = dictionary["fb_account"] as! String
             temp_user.username = dictionary["username"] as! String
             temp_user.email = dictionary["email"] as! String
+            temp_user.uid = dictionary["uid"] as! String
             print("detected")
             self.userList.append(temp_user)
             self.filteredUserList.append(temp_user)
@@ -136,6 +143,18 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
             self.usersTable.endUpdates()*/
             DispatchQueue.main.async {
                 self.usersTable.reloadData()
+            }
+        }, withCancel: nil)
+        
+        ref.child("users").child(uid!).child("friendlist").observe(.childAdded, with: {
+            (snapshot) in
+            print("fetch friends id")
+            let single_friend_id = snapshot.key
+            print(single_friend_id)
+            self.friendsIDList.append(single_friend_id)
+            DispatchQueue.main.async {
+                print("friends start reloading")
+                self.friendsTable.reloadData()
             }
         }, withCancel: nil)
         
@@ -172,15 +191,41 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredUserList.count
+        if tableView == usersTable{
+            return filteredUserList.count
+        }
+        else if tableView == friendsTable{
+            return friendsIDList.count
+        }
+        return Int()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == usersTable{
             
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellId")
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "usercellId")
             let temp_user = filteredUserList[indexPath.row]
             cell.textLabel?.text = temp_user.username
+            return cell
+        }
+        else if tableView == friendsTable{
+            //friendsList.removeAll()
+//            for _ in friendsIDList{
+//                friendsList.append(User())
+//                print(friendsList.count)
+//            }
+            print("finding friends according to friends id")
+            print("we have " + String(friendsIDList.count) + " friends id in list")
+            for temp_friends_ID in friendsIDList{
+                self.friendsList.append(self.userList.filter{
+                    ($0.uid?.contains(temp_friends_ID))!
+                }[0])
+            }
+            print("now we have " + String(friendsList.count) + " friends in friends list")
+            print("now refreshing row " + String(indexPath.row))
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "friendcellId")
+            let temp_friend_added = friendsList[indexPath.row]
+            cell.textLabel?.text = temp_friend_added.username
             return cell
         }
         return UITableViewCell()
@@ -211,7 +256,7 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
             let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
             let nextViewController = storyBoard.instantiateViewController(withIdentifier: "PersonalProfileViewController") as!PersonalProfileViewController
             nextViewController.friendUser = self.filteredUserList[indexPath.row]
-            nextViewController.profileMode = 1
+            nextViewController.profileMode = FRIEND_PROFILE_MODE
             self.present(nextViewController, animated: true, completion: nil)
         }
         /**/

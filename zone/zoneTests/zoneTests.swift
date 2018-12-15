@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import zone
+import Firebase
 
 class zoneTests: XCTestCase {
     

@@ -139,9 +139,9 @@
 				04E14DC3217FC0640087F402 /* MainPageViewController.swift */,
 				04FB6250218A38A800731588 /* PersonalProfileViewController.swift */,
 				04629B6A219F56ED00DB4AD7 /* ImagePickController.swift */,
-				04629B6C21A9EEDE00DB4AD7 /* global_variable_storage.swift */,
 				04629B7021AE169E00DB4AD7 /* MediaViewController.swift */,
 				04629B7221AF357A00DB4AD7 /* MapViewController.swift */,
+				04629B6C21A9EEDE00DB4AD7 /* global_variable_storage.swift */,
 			);
 			path = zone;
 			sourceTree = "<group>";
