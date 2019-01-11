@@ -17,7 +17,8 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     var search_friends_label = UILabel()
     var my_friends_label = UILabel()
     
-    let scrollView = UIScrollView()
+    //let bgScrollView = UIScrollView()
+    let mainScrollView = UIScrollView()
     let usersTable = UITableView()
     let friendsTable = UITableView()
     let usersSearch = UISearchController(searchResultsController: nil)
@@ -31,6 +32,10 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     var filteredUserList = [User]()
     var friendsIDList = [String]()
     var friendsList = [User]()
+    
+    var friend_icon = UIImageView()
+    var search_icon = UIImageView()
+    var scroll_bg = UIImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,7 +54,9 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
         portrait_button.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(goToPersonalProfile)))
         portrait_button.isUserInteractionEnabled = true
         
-
+        scroll_bg.image = #imageLiteral(resourceName: "main_bg.jpeg")
+        scroll_bg.frame = CGRect(x: screen_width-(screen_height-screen_width)/2, y: 0, width: screen_height, height: screen_height)
+        mainScrollView.addSubview(scroll_bg)
         
         let imageURL = storage_ref.child(uid!).child("ProfileImage.png")
         print(imageURL)
@@ -74,39 +81,57 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
 //        my_friends_label.frame = CGRect(x: screen_width*5/2-50, y: screen_height/2, width: 100, height: 20)
         
         
-        scrollView.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
-        scrollView.delegate = self
+        mainScrollView.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
+        //bgScrollView.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
+        mainScrollView.delegate = self
+        //bgScrollView.delegate = self
         //usersSearch.delegate = self
         usersTable.delegate = self
         friendsTable.delegate = self
-        self.scrollView.isPagingEnabled = true
-        self.scrollView.contentSize = CGSize(width: self.scrollView.frame.size.width * 3, height: self.scrollView.frame.size.height)
+        self.mainScrollView.isPagingEnabled = true
+        self.mainScrollView.contentSize = CGSize(width: self.mainScrollView.frame.size.width * 3, height: self.mainScrollView.frame.size.height)
+        //self.bgScrollView.contentSize = CGSize(width: self.bgScrollView.frame.size.height, height: self.mainScrollView.frame.size.height)
         configurePageControl()
         pageControl.isHidden = true
         print(portrait_button.frame)
-        self.view.addSubview(scrollView)
-        self.scrollView.addSubview(portrait_button)
-        //self.scrollView.addSubview(search_friends_label)
-        //self.scrollView.addSubview(my_friends_label)
+        
+        self.view.addSubview(mainScrollView)
+        //self.view.addSubview(bgScrollView)
+        self.mainScrollView.addSubview(portrait_button)
+        //self.mainScrollView.addSubview(search_friends_label)
+        //self.mainScrollView.addSubview(my_friends_label)
         pageControl.addTarget(self, action: #selector(self.changePage(sender:)), for: UIControlEvents.valueChanged)
-        scrollView.contentOffset.x = screen_width
+        mainScrollView.contentOffset.x = screen_width
         
         grab_info_from_db()
         
         usersTable.frame = CGRect(x: 0, y: 0, width: screen_width, height: screen_height)
-        self.scrollView.addSubview(usersTable)
+        self.mainScrollView.addSubview(usersTable)
         
         usersTable.dataSource = self
+        usersTable.backgroundColor = .clear
         
         friendsTable.frame = CGRect(x: 2*screen_width, y: 0, width: screen_width, height: screen_height)
-        self.scrollView.addSubview(friendsTable)
+        self.mainScrollView.addSubview(friendsTable)
         friendsTable.dataSource = self
+        friendsTable.backgroundColor = .clear
+        
         
         usersSearch.searchResultsUpdater = self
         usersTable.tableHeaderView = usersSearch.searchBar
         usersSearch.hidesNavigationBarDuringPresentation = false
         usersSearch.dimsBackgroundDuringPresentation = false
         
+        friend_icon.image = #imageLiteral(resourceName: "search_icon.png")
+        friend_icon.frame = CGRect(x: 1.8*screen_width, y: 0.2*screen_width, width: 0.1*screen_width, height: 0.1*screen_width)
+        mainScrollView.addSubview(friend_icon)
+        
+        search_icon.image = #imageLiteral(resourceName: "search_icon.png")
+        search_icon.frame = CGRect(x: 1.1*screen_width, y: screen_height-0.3*screen_width, width: 0.1*screen_width, height: 0.1*screen_width)
+        mainScrollView.addSubview(search_icon)
+        
+        
+        self.mainScrollView.addSubview(friendsTable)
         
     }
     
@@ -180,14 +205,19 @@ class MainPageViewController: UIViewController,UIScrollViewDelegate, UITableView
     }
     
     @objc func changePage(sender: AnyObject) -> () {
-        let x = CGFloat(pageControl.currentPage) * scrollView.frame.size.width
-        scrollView.setContentOffset(CGPoint(x: x,y :0), animated: true)
+        let x = CGFloat(pageControl.currentPage) * mainScrollView.frame.size.width
+        mainScrollView.setContentOffset(CGPoint(x: x,y :0), animated: true)
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         
         let pageNumber = round(scrollView.contentOffset.x / scrollView.frame.size.width)
         pageControl.currentPage = Int(pageNumber)
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let percentageScroll = mainScrollView.contentOffset.x/(2*screen_width)
+        scroll_bg.frame.origin.x = percentageScroll*(3*screen_width-screen_height)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
